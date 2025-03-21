@@ -9,7 +9,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   enabled             = true
   default_root_object = "index.html"
-  # aliases = ["artistsearch-${var.env}.gusmarko.com"]
+  aliases = ["artistsearch-${var.env}.gusmarko.com"]
 
 origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name
@@ -56,10 +56,9 @@ custom_error_response {
   }
 
  viewer_certificate {
-    cloudfront_default_certificate = true
-    # acm_certificate_arn = data.aws_acm_certificate.gusmarko.arn
-    # ssl_support_method  = "sni-only"
-    # minimum_protocol_version = "TLSv1.2_2021"
+    acm_certificate_arn = data.aws_acm_certificate.gusmarko.arn
+    ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {
@@ -68,24 +67,24 @@ custom_error_response {
   }
 }
 
-# data "aws_acm_certificate" "gusmarko" {
-#   domain   = "*.gusmarko.com"
-#   statuses = ["ISSUED"]
-#   most_recent = true
-# }
+data "aws_acm_certificate" "gusmarko" {
+  domain   = "*.gusmarko.com"
+  statuses = ["ISSUED"]
+  most_recent = true
+}
 
-# data "aws_route53_zone" "gusmarko_com" {
-#   name = "gusmarko.com"
-# }
+data "aws_route53_zone" "gusmarko_com" {
+  name = "gusmarko.com"
+}
 
-# resource "aws_route53_record" "cloudfront_alias" {
-#   zone_id = data.aws_route53_zone.gusmarko_com.zone_id
-#   name    = "artistsearch-${var.env}.gusmarko.com"
-#   type    = "A"
+resource "aws_route53_record" "cloudfront_alias" {
+  zone_id = data.aws_route53_zone.gusmarko_com.zone_id
+  name    = "artistsearch-${var.env}.gusmarko.com"
+  type    = "A"
 
-#   alias {
-#     name                   = aws_cloudfront_distribution.s3_distribution.domain_name
-#     zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
-#     evaluate_target_health = false 
-#   }
-# }
+  alias {
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
+    evaluate_target_health = false 
+  }
+}
