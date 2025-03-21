@@ -9,7 +9,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   enabled             = true
   default_root_object = "index.html"
-  aliases = ["artistsearch-${var.env}.gusmarko.com"]
+  # aliases = ["artistsearch-${var.env}.gusmarko.com"]
 
 origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name
@@ -37,7 +37,6 @@ custom_error_response {
     cached_methods = ["GET", "HEAD"]
     target_origin_id = aws_s3_bucket.main.id
 
-    
     compress               = true
     viewer_protocol_policy = "allow-all"
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
@@ -57,9 +56,10 @@ custom_error_response {
   }
 
  viewer_certificate {
+    cloudfront_default_certificate = true
     # acm_certificate_arn = data.aws_acm_certificate.gusmarko.arn
-    ssl_support_method  = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    # ssl_support_method  = "sni-only"
+    # minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {
