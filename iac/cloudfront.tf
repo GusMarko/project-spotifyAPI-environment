@@ -68,6 +68,7 @@ custom_error_response {
 }
 
 data "aws_acm_certificate" "gusmarko" {
+  provider = aws.us-east-1
   domain   = "*.gusmarko.com"
   statuses = ["ISSUED"]
   most_recent = true
