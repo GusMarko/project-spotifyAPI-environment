@@ -41,5 +41,5 @@ jobs:
                 cd iac
                 terraform init
                 terraform validate
-                terraform destroy -auto-approve
+                terraform apply -auto-approve
 
