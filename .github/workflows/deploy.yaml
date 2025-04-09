@@ -36,10 +36,10 @@ jobs:
               uses: hashicorp/setup-terraform@v2
 
             
-            - name: Validate / Deploy AWS resources
+            - name: Terminate AWS resources
               run: |
                 cd iac
                 terraform init
                 terraform validate
-                terraform apply -auto-approve
+                terraform destroy -auto-approve
 
