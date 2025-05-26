@@ -36,7 +36,7 @@ jobs:
               uses: hashicorp/setup-terraform@v2
 
             
-            - name: Validate / Deploy AWS resources
+            - name: Deploy AWS resources
               run: |
                 cd iac
                 terraform init

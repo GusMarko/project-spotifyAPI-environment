@@ -9,7 +9,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 resource "aws_cloudfront_distribution" "s3_distribution" {
   enabled             = true
   default_root_object = "index.html"
-  aliases = ["artistsearch-${var.env}.gusmarko.com"]
+  aliases = [var.env == "main" ? "artistsearch.gusmarko.com" : "artistsearch-${var.env}.gusmarko.com"]
 
 origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name
@@ -80,7 +80,7 @@ data "aws_route53_zone" "gusmarko_com" {
 
 resource "aws_route53_record" "cloudfront_alias" {
   zone_id = data.aws_route53_zone.gusmarko_com.zone_id
-  name    = "artistsearch-${var.env}.gusmarko.com"
+  name    = var.env == "main" ? "artistsearch.gusmarko.com" : "artistsearch-${var.env}.gusmarko.com"
   type    = "A"
 
   alias {
